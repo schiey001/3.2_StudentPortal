@@ -16,7 +16,7 @@ class AddActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
         setSupportActionBar(toolbar)
-
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         initViews()
     }
 
@@ -25,8 +25,8 @@ class AddActivity : AppCompatActivity() {
     }
 
     private fun onSaveClick() {
-        if (etAddPortal.text.toString().isNotBlank() && etAddPortalURL.text.toString().isNotBlank()) {
-            val portal = Portal(etAddPortal.text.toString(), etAddPortalURL.text.toString())
+        if (etAddPortal.text.toString().isNotBlank() && etAddPortalUrl.text.toString().isNotBlank()) {
+            val portal = Portal(etAddPortal.text.toString(), etAddPortalUrl.text.toString())
             val resultIntent = Intent()
             resultIntent.putExtra(EXTRA_PORTAL, portal)
             setResult(Activity.RESULT_OK, resultIntent)

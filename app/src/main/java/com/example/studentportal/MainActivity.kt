@@ -1,18 +1,17 @@
 package com.example.studentportal
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import androidx.recyclerview.widget.DividerItemDecoration
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -21,7 +20,7 @@ const val ADD_PORTAL_REQUEST_CODE = 100
 class MainActivity : AppCompatActivity() {
 
     private val portals = arrayListOf<Portal>()
-    private val portalAdapter = PortalAdapter(portals)
+    private val portalAdapter = PortalAdapter(portals) { portalItem : Portal -> portalItemClicked(portalItem) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,16 +41,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        // Initialize the recycler view with a linear layout manager, adapter
-        rvPortals.layoutManager =
-            LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
+        rvPortals.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         rvPortals.adapter = portalAdapter
-        rvPortals.addItemDecoration(
-            DividerItemDecoration(
-                this@MainActivity,
-                DividerItemDecoration.VERTICAL
-            )
-        )
         createItemTouchHelper().attachToRecyclerView(rvPortals)
     }
 
@@ -112,5 +103,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return ItemTouchHelper(callback)
+    }
+
+    private fun portalItemClicked(portalItem : Portal) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(portalItem.portalURL))
+        startActivity(browserIntent)
     }
 }
